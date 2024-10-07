@@ -1,14 +1,12 @@
 import "../index.css";
 import { Item } from "../types/item";
+import { backendUrl } from "../utils/backendUrl";
 import ItemList from "./ItemList";
 import fetcher from "./fetcher";
 import useSWR from "swr";
 
 const Home = () => {
-  const { data: items, error } = useSWR<Item[]>(
-    "http://localhost:3000/",
-    fetcher
-  );
+  const { data: items, error } = useSWR<Item[]>(`${backendUrl}/`, fetcher);
 
   if (error) {
     console.log("Error fetching items");

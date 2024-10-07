@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
+import { backendUrl } from "../utils/backendUrl";
 
 type Params = {
   id: string;
@@ -14,7 +15,7 @@ type Params = {
 const ItemDetails = () => {
   const { id } = useParams<Params>();
   const { data: item, error } = useSWR<Item>(
-    `http://localhost:3000/items/${id}`,
+    `${backendUrl}/items/${id}`,
     fetcher
   );
 
@@ -24,7 +25,7 @@ const ItemDetails = () => {
 
   const handleDelete = async () => {
     try {
-      await fetch(`http://localhost:3000/items/${id}`, {
+      await fetch(`${backendUrl}/items/${id}`, {
         method: "DELETE",
         headers: {
           secrettoken: localStorage.getItem("token") || "",

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Item } from "../types/item";
 import ItemForm from "./ItemForm";
+import { backendUrl } from "../utils/backendUrl";
 
 const Create = () => {
   const [isPending, setIsPending] = useState(false);
@@ -10,7 +11,7 @@ const Create = () => {
   const handleAddItem = async (item: Item) => {
     setIsPending(true);
     try {
-      await fetch("http://localhost:3000/add-item", {
+      await fetch(`${backendUrl}/add-item`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(item),
