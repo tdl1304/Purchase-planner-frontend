@@ -11,7 +11,7 @@ const Create = () => {
   const handleAddItem = async (item: Item) => {
     setIsPending(true);
     try {
-      await fetch(`${backendUrl}/add-item`, {
+      await fetch(`${backendUrl}/item`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(item),

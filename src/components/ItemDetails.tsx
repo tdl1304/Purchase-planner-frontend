@@ -15,7 +15,7 @@ type Params = {
 const ItemDetails = () => {
   const { id } = useParams<Params>();
   const { data: item, error } = useSWR<Item>(
-    `${backendUrl}/items/${id}`,
+    `${backendUrl}/item/${id}`,
     fetcher
   );
 
@@ -25,7 +25,7 @@ const ItemDetails = () => {
 
   const handleDelete = async () => {
     try {
-      await fetch(`${backendUrl}/items/${id}`, {
+      await fetch(`${backendUrl}/item/${id}`, {
         method: "DELETE",
         headers: {
           secrettoken: localStorage.getItem("token") || "",

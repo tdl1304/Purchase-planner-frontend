@@ -6,7 +6,7 @@ import fetcher from "./fetcher";
 import useSWR from "swr";
 
 const Home = () => {
-  const { data: items, error } = useSWR<Item[]>(`${backendUrl}/`, fetcher);
+  const { data: items, error } = useSWR<Item[]>(`${backendUrl}/item`, fetcher);
 
   if (error) {
     console.log("Error fetching items");
