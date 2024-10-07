@@ -1,12 +1,12 @@
 import { useParams } from "react-router-dom";
 import useSWR from "swr";
-import fetcher from "./fetcher";
 import { Item } from "../types/item";
 import { useState } from "react";
 import { Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import { backendUrl } from "../utils/backendUrl";
+import { customFetch, fetcher } from "../utils/serverUtils";
 
 type Params = {
   id: string;
@@ -25,13 +25,11 @@ const ItemDetails = () => {
 
   const handleDelete = async () => {
     try {
-      await fetch(`${backendUrl}/item/${id}`, {
+      await customFetch(`${backendUrl}/item/${id}`, {
         method: "DELETE",
-        headers: {
-          secrettoken: localStorage.getItem("token") || "",
-        },
       });
       navigate("/");
+      window.location.reload();
     } catch (error) {
       console.error("Failed to delete the item:", error);
     }

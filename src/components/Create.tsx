@@ -18,6 +18,7 @@ const Create = () => {
       });
 
       console.log("New item added");
+      alert("New item is added, wait for approval");
       setIsPending(false);
       navigate("/");
     } catch (error) {

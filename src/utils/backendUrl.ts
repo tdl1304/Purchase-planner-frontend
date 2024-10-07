@@ -1,1 +1,1 @@
-export const backendUrl = "https://purchase-planner-backend.vercel.app";
+export const backendUrl = "http://localhost:3000"; //"https://purchase-planner-backend.vercel.app";

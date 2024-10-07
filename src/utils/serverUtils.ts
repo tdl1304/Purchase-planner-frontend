@@ -12,5 +12,14 @@ const fetcher = async (url: string, method: string = "GET") => {
   console.log("Fetched data:", data);
   return data;
 };
+async function customFetch(url: string, options: RequestInit) {
+  return fetch(url, {
+    ...options,
+    headers: {
+      ...options.headers,
+      secrettoken: localStorage.getItem("token") || "",
+    },
+  });
+}
 
-export default fetcher;
+export { fetcher, customFetch };

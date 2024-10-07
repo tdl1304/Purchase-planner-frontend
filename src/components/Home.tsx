@@ -1,8 +1,8 @@
 import "../index.css";
 import { Item } from "../types/item";
 import { backendUrl } from "../utils/backendUrl";
+import { fetcher } from "../utils/serverUtils";
 import ItemList from "./ItemList";
-import fetcher from "./fetcher";
 import useSWR from "swr";
 
 const Home = () => {
