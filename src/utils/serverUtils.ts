@@ -17,6 +17,7 @@ async function customFetch(url: string, options: RequestInit) {
     ...options,
     headers: {
       ...options.headers,
+      mode: "no-cors",
       secrettoken: localStorage.getItem("token") || "",
     },
   });
