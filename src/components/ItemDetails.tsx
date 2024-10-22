@@ -25,9 +25,7 @@ const ItemDetails = () => {
 
   const handleDelete = async () => {
     try {
-      await customFetch(`${backendUrl}/item/${id}`, {
-        method: "DELETE",
-      });
+      await customFetch(`${backendUrl}/item/${id}`, {}, "DELETE");
       navigate("/");
       window.location.reload();
     } catch (error) {

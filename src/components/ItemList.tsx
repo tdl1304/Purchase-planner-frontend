@@ -34,13 +34,13 @@ const ItemList = ({ items }: ItemProps) => {
   const handleChange = async (item: Item) => {
     item.published = !item.published;
     try {
-      await customFetch(`${backendUrl}/item/${item._id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
+      await customFetch(
+        `${backendUrl}/item/${item._id}`,
+        {
+          body: JSON.stringify(item),
         },
-        body: JSON.stringify(item),
-      }).then((res) => {
+        "PUT"
+      ).then((res) => {
         if (res.status === 200) {
           updateItems(item);
         }

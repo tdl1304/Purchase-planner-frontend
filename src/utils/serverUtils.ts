@@ -1,7 +1,8 @@
 const fetcher = async (url: string, method: string = "GET") => {
   const response = await fetch(url, {
-    method,
+    method: method,
     headers: {
+      "Content-Type": "application/json",
       secrettoken: localStorage.getItem("token") || "",
     },
   });
@@ -12,12 +13,14 @@ const fetcher = async (url: string, method: string = "GET") => {
   console.log("Fetched data:", data);
   return data;
 };
-async function customFetch(url: string, options: RequestInit) {
+
+async function customFetch(url: string, options: RequestInit, method = "GET") {
   return fetch(url, {
+    method: method,
     ...options,
     headers: {
       ...options.headers,
-      mode: "no-cors",
+      "Content-Type": "application/json",
       secrettoken: localStorage.getItem("token") || "",
     },
   });
