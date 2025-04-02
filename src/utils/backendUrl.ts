@@ -1,5 +1,5 @@
-// backend in vercel
-export const backendUrl = "https://purchase-planner-backend.vercel.app";
+const isDevelopment = import.meta.env.DEV;
 
-// change to locally hosted backend when developing
-// "http://localhost:3000";
+export const backendUrl = isDevelopment
+  ? "http://localhost:3000"
+  : "https://purchase-planner-backend.vercel.app";
