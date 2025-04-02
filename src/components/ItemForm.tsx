@@ -2,38 +2,63 @@ import { FormEvent, useState } from "react";
 import { Item } from "../types/item";
 import { Button } from "@mui/material";
 import { TextField, MenuItem } from "@mui/material";
+import { resizeImage } from "../utils/imageUtils";
 
 type ItemFormProps = {
   onSubmit: (item: Item) => void;
   isPending: boolean;
+  onImageUpload: (image: File) => Promise<string>;
+  uploading: boolean;
 };
 
-const ItemForm = ({ onSubmit, isPending }: ItemFormProps) => {
+const ItemForm = ({
+  onSubmit,
+  isPending,
+  onImageUpload,
+  uploading,
+}: ItemFormProps) => {
   const [title, setTitle] = useState("");
   const [person, setPerson] = useState("");
   const [store, setStore] = useState("");
   const [price, setPrice] = useState("");
-  const [imageURL, setImageURL] = useState(
-    "https://psediting.websites.co.in/obaju-turquoise/img/product-placeholder.png"
-  );
+  const [previewImageURL, setPreviewImageURL] = useState("");
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   const capitalizeFirstLetter = (input: string) => {
     if (!input) return "";
     return input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
   };
 
-  const handleURL = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const url = event.target.value;
-    setImageURL(url);
-    if (url) {
-      alert("NB! Please do not put any inappropriate content :)");
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const item: Item = {
+        title,
+        store,
+        person,
+        price,
+        imageURL: selectedImage ? await onImageUpload(selectedImage) : "",
+      };
+      onSubmit(item);
+    } catch (error) {
+      alert(error);
     }
   };
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    const item: Item = { title, store, person, price, imageURL };
-    onSubmit(item);
+  const handleImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reducedFile = await resizeImage(file, 600, 600);
+      console.log(
+        "Reduced file size with percent:",
+        (1 - reducedFile.size / file.size) * 100
+      );
+      setSelectedImage(reducedFile);
+      setPreviewImageURL(URL.createObjectURL(reducedFile));
+    }
   };
 
   return (
@@ -104,30 +129,37 @@ const ItemForm = ({ onSubmit, isPending }: ItemFormProps) => {
         <MenuItem value="Uncertain">Uncertain</MenuItem>
       </TextField>
 
-      {/* upload image */}
-      <TextField
-        label="Image URL"
-        variant="filled"
-        size="small"
-        fullWidth
-        onChange={handleURL}
-        sx={{
-          backgroundColor: "#F0F0F0",
-          mb: 3,
-        }}
-      />
+      {/* Upload image */}
+      <div className="flex mb-8 w-full">
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="w-[90%]"
+          required
+        />
+      </div>
+
+      {/* Image preview */}
+      {selectedImage && (
+        <img
+          src={previewImageURL}
+          alt="Preview"
+          style={{ maxWidth: "100%", height: "auto", marginBottom: "1rem" }}
+        />
+      )}
 
       {/* button to submit */}
-      {!isPending && (
+      {!isPending && !uploading && (
         <Button variant="contained" color="primary" size="medium" type="submit">
           Add item
         </Button>
       )}
 
       {/* to show that the item is adding */}
-      {isPending && (
+      {(isPending || uploading) && (
         <Button variant="contained" color="secondary" size="medium" disabled>
-          Adding item...
+          {isPending ? "Adding item..." : "Uploading image..."}
         </Button>
       )}
     </form>
