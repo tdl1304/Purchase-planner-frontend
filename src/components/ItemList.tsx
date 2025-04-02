@@ -16,8 +16,6 @@ const ItemList = ({ items }: ItemProps) => {
   const pathname = location.pathname;
   const isAdminPage = pathname.includes("code");
 
-  const [isImageLoading, setIsImageLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
   const [itemList, setItemList] = useState(items);
 
   const sortedItems = useMemo(
@@ -76,21 +74,12 @@ const ItemList = ({ items }: ItemProps) => {
                 <p>Requestor: {item.person}</p>
                 {item.purchased && <p className="text-green-500">Purchased</p>}
               </div>
-              {isImageLoading && !hasError && (
-                <div className="text-sm">Image is loading...</div>
-              )}
               <img
                 src={
-                  hasError
-                    ? "https://psediting.websites.co.in/obaju-turquoise/img/product-placeholder.png"
-                    : item.imageURL
+                  item.imageURL ??
+                  "https://psediting.websites.co.in/obaju-turquoise/img/product-placeholder.png"
                 }
                 className="object-cover w-32 h-32 md:w-1/4 md-h-auto rounded-md"
-                onLoad={() => setIsImageLoading(false)}
-                onError={() => {
-                  setIsImageLoading(false);
-                  setHasError(true);
-                }}
               />
             </div>
           </Link>
