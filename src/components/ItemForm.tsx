@@ -54,7 +54,7 @@ const ItemForm = ({
       const reducedFile = await resizeImage(file, 600, 600);
       console.log(
         "Reduced file size with percent:",
-        (reducedFile.size / file.size) * 100
+        (1 - reducedFile.size / file.size) * 100
       );
       setSelectedImage(reducedFile);
       setPreviewImageURL(URL.createObjectURL(reducedFile));
