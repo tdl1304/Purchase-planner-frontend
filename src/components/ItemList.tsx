@@ -18,18 +18,20 @@ const ItemList = ({ items }: ItemProps) => {
 
   const [itemList, setItemList] = useState(items);
 
-  const sortedItems = useMemo(
-    () => itemList.sort((a, b) => Number(a.purchased) - Number(b.purchased)),
-    [itemList]
-  );
+  const sortedItems = useMemo(() => {
+    const purchasedItems = itemList.filter((item) => item.purchased);
+    const notPurchasedItems = itemList.filter((item) => !item.purchased);
+
+    notPurchasedItems.sort((a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0));
+
+    return [...notPurchasedItems, ...purchasedItems];
+  }, [itemList]);
 
   const handlePublishedChange = async (item: Item) => {
     item.published = !item.published;
     const updatedItem = await putItem(item);
     if (updatedItem) {
-      setItemList((prevItems) =>
-        prevItems.map((i) => (i._id === updatedItem._id ? updatedItem : i))
-      );
+      setItemList((prevItems) => prevItems.map((i) => (i._id === updatedItem._id ? updatedItem : i)));
     }
   };
 
@@ -37,9 +39,7 @@ const ItemList = ({ items }: ItemProps) => {
     item.purchased = !item.purchased;
     const updatedItem = await putItem(item);
     if (updatedItem) {
-      setItemList((prevItems) =>
-        prevItems.map((i) => (i._id === updatedItem._id ? updatedItem : i))
-      );
+      setItemList((prevItems) => prevItems.map((i) => (i._id === updatedItem._id ? updatedItem : i)));
     }
   };
 
@@ -75,10 +75,7 @@ const ItemList = ({ items }: ItemProps) => {
                 {item.purchased && <p className="text-green-500">Purchased</p>}
               </div>
               <img
-                src={
-                  item.imageURL ??
-                  "https://psediting.websites.co.in/obaju-turquoise/img/product-placeholder.png"
-                }
+                src={item.imageURL ?? "https://psediting.websites.co.in/obaju-turquoise/img/product-placeholder.png"}
                 className="object-cover w-32 h-32 md:w-1/4 md-h-auto rounded-md"
               />
             </div>
@@ -87,22 +84,14 @@ const ItemList = ({ items }: ItemProps) => {
             <div className="flex w-full justify-end">
               <FormControlLabel
                 control={
-                  <Checkbox
-                    color="primary"
-                    onChange={() => handlePublishedChange(item)}
-                    checked={item.published}
-                  />
+                  <Checkbox color="primary" onChange={() => handlePublishedChange(item)} checked={item.published} />
                 }
                 label="Approve"
                 className="text-neutral-100"
               />
               <FormControlLabel
                 control={
-                  <Checkbox
-                    color="primary"
-                    onChange={() => handlePurchasedChange(item)}
-                    checked={item.purchased}
-                  />
+                  <Checkbox color="primary" onChange={() => handlePurchasedChange(item)} checked={item.purchased} />
                 }
                 label="Purchased"
                 className="text-neutral-100"
