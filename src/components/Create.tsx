@@ -36,7 +36,6 @@ const Create = () => {
 
     try {
       const response = await fetch(`${backendUrl}/upload`, {
-        // replace '/upload'
         method: "POST",
         body: formData,
       });
@@ -47,11 +46,11 @@ const Create = () => {
 
       const data = await response.json();
       setUploading(false);
-      return data.imageUrl; // Assuming the backend returns an object with imageUrl property
+      return data.imageUrl;
     } catch (error) {
       console.error("Error uploading image:", error);
       setUploading(false);
-      throw error; // Re-throw the error to be caught by the caller
+      throw error;
     }
   };
 

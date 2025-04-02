@@ -46,7 +46,7 @@ export const resizeImage = (
           }
         },
         file.type,
-        0.8 // Adjust quality if needed (0.8 = 80%)
+        0.6 // Adjust quality if needed (0.8 = 80%)
       );
     };
 

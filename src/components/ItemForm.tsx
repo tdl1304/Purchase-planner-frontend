@@ -21,9 +21,7 @@ const ItemForm = ({
   const [person, setPerson] = useState("");
   const [store, setStore] = useState("");
   const [price, setPrice] = useState("");
-  const [previewImageURL, setPreviewImageURL] = useState(
-    "https://psediting.websites.co.in/obaju-turquoise/img/product-placeholder.png"
-  );
+  const [previewImageURL, setPreviewImageURL] = useState("");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   const capitalizeFirstLetter = (input: string) => {
@@ -34,14 +32,18 @@ const ItemForm = ({
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    const item: Item = {
-      title,
-      store,
-      person,
-      price,
-      imageURL: selectedImage ? await onImageUpload(selectedImage) : "",
-    };
-    onSubmit(item);
+    try {
+      const item: Item = {
+        title,
+        store,
+        person,
+        price,
+        imageURL: selectedImage ? await onImageUpload(selectedImage) : "",
+      };
+      onSubmit(item);
+    } catch (error) {
+      alert(error);
+    }
   };
 
   const handleImageChange = async (
