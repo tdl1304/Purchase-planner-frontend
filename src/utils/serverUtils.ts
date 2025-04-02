@@ -33,8 +33,13 @@ async function customFetch<T>(
     throw new Error("Fetch failed for url: " + url);
   }
 
-  const data = (await response.json()) as T;
-  return data;
+  const contentType = response.headers.get("content-type");
+  if (contentType && contentType.includes("application/json")) {
+    const data = (await response.json()) as T;
+    return data;
+  } else {
+    return response.text() as unknown as T;
+  }
 }
 
 export { fetcher, customFetch };

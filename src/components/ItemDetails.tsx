@@ -18,7 +18,6 @@ const ItemDetails = () => {
     `${backendUrl}/item/${id}`,
     fetcher
   );
-
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const navigate = useNavigate();
@@ -67,16 +66,17 @@ const ItemDetails = () => {
             <p className="mb-2">Request by: {item.person}</p>
             <p className="mb-2">Location: {item.store}</p>
             <p className="mb-4">Price: {item.price}</p>
-            <Button
-              variant="contained"
-              color="error"
-              size="small"
-              startIcon={<DeleteIcon />}
-              onClick={handleDelete}
-              disabled={!localStorage.getItem("token")}
-            >
-              Delete
-            </Button>
+            {localStorage.getItem("token") && (
+              <Button
+                variant="contained"
+                color="error"
+                size="small"
+                startIcon={<DeleteIcon />}
+                onClick={handleDelete}
+              >
+                Delete
+              </Button>
+            )}
           </article>
         )}
       </div>

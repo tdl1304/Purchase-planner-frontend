@@ -11,12 +11,7 @@ type ItemFormProps = {
   uploading: boolean;
 };
 
-const ItemForm = ({
-  onSubmit,
-  isPending,
-  onImageUpload,
-  uploading,
-}: ItemFormProps) => {
+const ItemForm = ({ onSubmit, isPending, onImageUpload, uploading }: ItemFormProps) => {
   const [title, setTitle] = useState("");
   const [person, setPerson] = useState("");
   const [store, setStore] = useState("");
@@ -46,16 +41,11 @@ const ItemForm = ({
     }
   };
 
-  const handleImageChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const reducedFile = await resizeImage(file, 600, 600);
-      console.log(
-        "Reduced file size with percent:",
-        (1 - reducedFile.size / file.size) * 100
-      );
+      console.log("Reduced file size with percent:", (1 - reducedFile.size / file.size) * 100);
       setSelectedImage(reducedFile);
       setPreviewImageURL(URL.createObjectURL(reducedFile));
     }
@@ -131,37 +121,30 @@ const ItemForm = ({
 
       {/* Upload image */}
       <div className="flex mb-8 w-full">
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="w-[90%]"
-          required
-        />
+        <input type="file" accept="image/*" onChange={handleImageChange} className="w-[90%]" required />
       </div>
 
       {/* Image preview */}
       {selectedImage && (
-        <img
-          src={previewImageURL}
-          alt="Preview"
-          style={{ maxWidth: "100%", height: "auto", marginBottom: "1rem" }}
-        />
+        <img src={previewImageURL} alt="Preview" style={{ maxWidth: "100%", height: "auto", marginBottom: "1rem" }} />
       )}
 
       {/* button to submit */}
-      {!isPending && !uploading && (
-        <Button variant="contained" color="primary" size="medium" type="submit">
-          Add item
-        </Button>
-      )}
-
-      {/* to show that the item is adding */}
-      {(isPending || uploading) && (
-        <Button variant="contained" color="secondary" size="medium" disabled>
-          {isPending ? "Adding item..." : "Uploading image..."}
-        </Button>
-      )}
+      <Button
+        variant="contained"
+        color="primary"
+        size="medium"
+        type="submit"
+        disabled={isPending || uploading}
+        sx={{
+          "&.Mui-disabled": {
+            backgroundColor: "rgba(0, 0, 0, 0.12)",
+            color: "rgba(0, 0, 0, 0.26)",
+          },
+        }}
+      >
+        {isPending ? "Adding item..." : uploading ? "Uploading image..." : "Add item"}
+      </Button>
     </form>
   );
 };

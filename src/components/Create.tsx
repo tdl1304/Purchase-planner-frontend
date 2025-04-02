@@ -19,9 +19,9 @@ const Create = () => {
       });
 
       console.log("New item added");
-      alert("New item is added, wait for approval");
       setIsPending(false);
       navigate("/");
+      window.location.reload();
     } catch (error) {
       console.error("Failed to add the item:", error);
       setIsPending(false);
@@ -41,7 +41,9 @@ const Create = () => {
       });
 
       if (!response.ok) {
-        throw new Error(`Image upload failed with status: ${response.status}`);
+        throw new Error(
+          `Image upload failed with status: ${response.status} - ${response.statusText}`
+        );
       }
 
       const data = await response.json();
