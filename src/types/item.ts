@@ -5,7 +5,7 @@ export type Item = {
   person: string;
   price: string;
   imageURL?: string;
-  createdAt?: Date;
+  createdAt?: string | Date;
   published?: boolean;
   purchased?: boolean;
 };

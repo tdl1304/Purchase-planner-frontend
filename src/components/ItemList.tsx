@@ -22,7 +22,12 @@ const ItemList = ({ items }: ItemProps) => {
     const purchasedItems = itemList.filter((item) => item.purchased);
     const notPurchasedItems = itemList.filter((item) => !item.purchased);
 
-    notPurchasedItems.sort((a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0));
+    notPurchasedItems.sort((a, b) => {
+      if (!a.createdAt || !b.createdAt) {
+        return 0;
+      }
+      return new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf();
+    });
 
     return [...notPurchasedItems, ...purchasedItems];
   }, [itemList]);
