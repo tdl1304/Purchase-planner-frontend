@@ -6,4 +6,5 @@ export type Item = {
   price: string;
   imageURL?: string;
   published?: boolean;
+  purchased?: boolean;
 };

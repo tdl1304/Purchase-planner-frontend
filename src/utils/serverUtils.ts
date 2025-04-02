@@ -14,8 +14,12 @@ const fetcher = async (url: string, method: string = "GET") => {
   return data;
 };
 
-async function customFetch(url: string, options: RequestInit, method = "GET") {
-  return fetch(url, {
+async function customFetch<T>(
+  url: string,
+  options: RequestInit,
+  method = "GET"
+): Promise<T> {
+  const response = await fetch(url, {
     method: method,
     ...options,
     headers: {
@@ -24,6 +28,13 @@ async function customFetch(url: string, options: RequestInit, method = "GET") {
       secrettoken: localStorage.getItem("token") || "",
     },
   });
+
+  if (!response.ok) {
+    throw new Error("Fetch failed for url: " + url);
+  }
+
+  const data = (await response.json()) as T;
+  return data;
 }
 
 export { fetcher, customFetch };

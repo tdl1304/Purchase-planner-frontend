@@ -1,6 +1,6 @@
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Item } from "../types/item";
 import { backendUrl } from "../utils/backendUrl";
@@ -20,40 +20,48 @@ const ItemList = ({ items }: ItemProps) => {
   const [hasError, setHasError] = useState(false);
   const [itemList, setItemList] = useState(items);
 
-  function updateItems(item: Item) {
-    const newItems = items.map((i) => {
-      if (i._id === item._id) {
-        return item;
-      }
-      return i;
-    });
-    setItemList(newItems);
-  }
+  const sortedItems = useMemo(
+    () => itemList.sort((a, b) => Number(a.purchased) - Number(b.purchased)),
+    [itemList]
+  );
 
-  //admin stuff
-  const handleChange = async (item: Item) => {
+  const handlePublishedChange = async (item: Item) => {
     item.published = !item.published;
+    const updatedItem = await putItem(item);
+    if (updatedItem) {
+      setItemList((prevItems) =>
+        prevItems.map((i) => (i._id === updatedItem._id ? updatedItem : i))
+      );
+    }
+  };
+
+  const handlePurchasedChange = async (item: Item) => {
+    item.purchased = !item.purchased;
+    const updatedItem = await putItem(item);
+    if (updatedItem) {
+      setItemList((prevItems) =>
+        prevItems.map((i) => (i._id === updatedItem._id ? updatedItem : i))
+      );
+    }
+  };
+
+  const putItem = async (item: Item) => {
     try {
-      await customFetch(
+      return await customFetch<Item>(
         `${backendUrl}/item/${item._id}`,
         {
           body: JSON.stringify(item),
         },
         "PUT"
-      ).then((res) => {
-        if (res.status === 200) {
-          updateItems(item);
-        }
-      });
-      updateItems(item);
+      ).then((res) => res);
     } catch (error) {
-      console.error("Failed to update the item:", error);
+      console.error("Failed to update the items:", error);
     }
   };
 
   return (
     <div className="max-w-sm md:max-w-xl mx-auto my-10 p-5">
-      {itemList.map((item) => (
+      {sortedItems.map((item) => (
         <div
           className="bg-[var(--foreground-color)] p-5 px-6 
           mb-5 shadow-black rounded-lg text-neutral-100 transition-transform 
@@ -66,6 +74,7 @@ const ItemList = ({ items }: ItemProps) => {
                 <h2 className="mb-2 text-[20px] font-bold">{item.title}</h2>
                 <p>Location: {item.store}</p>
                 <p>Requestor: {item.person}</p>
+                {item.purchased && <p className="text-green-500">Purchased</p>}
               </div>
               {isImageLoading && !hasError && (
                 <div className="text-sm">Image is loading...</div>
@@ -91,11 +100,22 @@ const ItemList = ({ items }: ItemProps) => {
                 control={
                   <Checkbox
                     color="primary"
-                    onChange={() => handleChange(item)}
+                    onChange={() => handlePublishedChange(item)}
                     checked={item.published}
                   />
                 }
                 label="Approve"
+                className="text-neutral-100"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    color="primary"
+                    onChange={() => handlePurchasedChange(item)}
+                    checked={item.purchased}
+                  />
+                }
+                label="Purchased"
                 className="text-neutral-100"
               />
             </div>
