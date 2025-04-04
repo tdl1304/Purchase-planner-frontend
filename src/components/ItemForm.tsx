@@ -52,7 +52,7 @@ const ItemForm = ({ onSubmit, isPending, onImageUpload, uploading }: ItemFormPro
   };
 
   return (
-    <form onSubmit={handleSubmit} className="font-medium text-sm md:text-base">
+    <form onSubmit={handleSubmit} className="text-sm font-medium md:text-base">
       {/* title */}
       <TextField
         label="Item Name"
@@ -120,9 +120,7 @@ const ItemForm = ({ onSubmit, isPending, onImageUpload, uploading }: ItemFormPro
       </TextField>
 
       {/* Upload image */}
-      <div className="flex mb-8 w-full">
-        <input type="file" accept="image/*" onChange={handleImageChange} className="w-[90%]" required />
-      </div>
+      <input type="file" accept="image/*" onChange={handleImageChange} className="w-[90%]" required />
 
       {/* Image preview */}
       {selectedImage && (
