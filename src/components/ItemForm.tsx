@@ -120,7 +120,7 @@ const ItemForm = ({ onSubmit, isPending, onImageUpload, uploading }: ItemFormPro
       </TextField>
 
       {/* Upload image */}
-      <input type="file" accept="image/*" onChange={handleImageChange} className="w-[90%]" required />
+      <input type="file" accept="image/*" onChange={handleImageChange} className="w-[90%] mb-8" required />
 
       {/* Image preview */}
       {selectedImage && (

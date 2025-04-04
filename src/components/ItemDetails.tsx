@@ -14,10 +14,7 @@ type Params = {
 
 const ItemDetails = () => {
   const { id } = useParams<Params>();
-  const { data: item, error } = useSWR<Item>(
-    `${backendUrl}/item/${id}`,
-    fetcher
-  );
+  const { data: item, error } = useSWR<Item>(`${backendUrl}/item/${id}`, fetcher);
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const navigate = useNavigate();
@@ -36,17 +33,14 @@ const ItemDetails = () => {
     <div>
       {!item && <div className="text-white">Loading...</div>}
       {error && <div>{error}</div>}
-      <div
-        className="flex justify-center my-5 md:my-10 p-8
-         text-neutral-100 font-medium"
-      >
+      <div className="flex justify-center p-8 my-5 font-medium md:my-10 text-neutral-100">
         {item && (
           <article
-            className="bg-[var(--foreground-color)] p-4 md:p-6 rounded 
-            text-center text-sm md:text-base"
+            className="bg-[var(--foreground-color)] p-8 md:p-6
+            text-center text-sm md:text-base rounded-xl"
           >
-            <h2 className="text-xl md:text-2xl font-bold mb-2">{item.title}</h2>
-            <div className="mb-4">
+            <h2 className="mb-2 text-xl font-bold md:text-2xl">{item.title}</h2>
+            <div className="flex justify-center mb-4">
               {isImageLoading && !hasError && <div>Image is loading...</div>}
               <img
                 src={
@@ -55,7 +49,7 @@ const ItemDetails = () => {
                     : item.imageURL
                 }
                 alt={item.title}
-                className="w-72 h-72 md:w-96 md:h-96 object-cover rounded"
+                className="object-cover rounded w-72 h-72 md:w-96 md:h-96"
                 onLoad={() => setIsImageLoading(false)}
                 onError={() => {
                   setIsImageLoading(false);
@@ -67,13 +61,7 @@ const ItemDetails = () => {
             <p className="mb-2">Location: {item.store}</p>
             <p className="mb-4">Price: {item.price}</p>
             {localStorage.getItem("token") && (
-              <Button
-                variant="contained"
-                color="error"
-                size="small"
-                startIcon={<DeleteIcon />}
-                onClick={handleDelete}
-              >
+              <Button variant="contained" color="error" size="small" startIcon={<DeleteIcon />} onClick={handleDelete}>
                 Delete
               </Button>
             )}
