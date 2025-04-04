@@ -9,10 +9,6 @@ import Code from "./components/Code";
 function App() {
   return (
     <>
-      <head>
-        <title>Purchase Planner by Tommy</title>
-        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-      </head>
       <Router>
         <div className="App">
           <Navbar />
